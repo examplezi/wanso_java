@@ -1,18 +1,17 @@
 package com.example.wanso.contorller;
-//import com.ryan.spring_boot_rest_api.dto.CreatUserDto;
-//import com.ryan.spring_boot_rest_api.dto.SuccessResponse;
-//import com.ryan.spring_boot_rest_api.dto.UpdateUserDto;
-//import com.ryan.spring_boot_rest_api.service.UserService;
 
+
+import com.example.wanso.dto.CreateUserDto;
 import com.example.wanso.dto.SuccessResponse;
 import com.example.wanso.dto.UpdateUserDto;
+import com.example.wanso.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.validation.Valid;
 import java.nio.charset.Charset;
 
 @RestController
@@ -30,9 +29,9 @@ public class UserController {
      * @return User Id
      */
     @PostMapping(value = "/create") // 유저생성
-    public ResponseEntity<SuccessResponse> onCreateUser(@RequestBody @Valid CreatUserDto creatUserDto){
+    public ResponseEntity<SuccessResponse> onCreateUser(@RequestBody @Valid CreateUserDto createUserDto){
 
-        SuccessResponse response = this.userService.onCreateUser(creatUserDto);
+        SuccessResponse response = this.userService.onCreateUser(createUserDto);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
