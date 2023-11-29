@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
+  //  id 'war'
 }
 
 group = 'com.example'
@@ -23,7 +24,11 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    runtimeOnly 'mysql:mysql-connector-java' //MySQL
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' //JPA
+    implementation 'org.springframework.boot:spring-boot-starter-validation' //@Valid
+    //jakarta
+   // providedCompile 'jakarta.platform:jakarta.jakartaee-web-api:8.0.0'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
