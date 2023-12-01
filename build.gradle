@@ -26,6 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     runtimeOnly 'mysql:mysql-connector-java' //MySQL
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa' //JPA
+    runtimeOnly 'com.h2database:h2' // JPA
     implementation 'org.springframework.boot:spring-boot-starter-validation' //@Valid
     //jakarta
    // providedCompile 'jakarta.platform:jakarta.jakartaee-web-api:8.0.0'

@@ -1,10 +1,10 @@
-package com.example.wanso.contorller;
+package com.example.wanso.user.contorller;
 
 
-import com.example.wanso.dto.CreateUserDto;
-import com.example.wanso.dto.SuccessResponse;
-import com.example.wanso.dto.UpdateUserDto;
-import com.example.wanso.service.UserService;
+import com.example.wanso.user.dto.CreateUserDto;
+import com.example.wanso.user.dto.SuccessResponse;
+import com.example.wanso.user.dto.UpdateUserDto;
+import com.example.wanso.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
