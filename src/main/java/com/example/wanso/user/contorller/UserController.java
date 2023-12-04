@@ -108,7 +108,7 @@ public class UserController {
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<SuccessResponse> deleteUser(@PathVariable("id") int id){
 
-        SuccessResponse response = this.userService.deleteUser(id);
+        SuccessResponse response = this.userService.deleteUser((long) id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

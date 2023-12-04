@@ -25,6 +25,9 @@ import java.time.LocalDateTime;
 @Table(name = "user")
 public class User {
 
+//    public User orElseThrow(Object o) {
+//    }
+
     public enum UserInterestEnum {
         ROMANCE,
         DRAMA,

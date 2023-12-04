@@ -9,11 +9,14 @@ import java.util.Optional;
 //public class UserRepository {
 //기본 CRUD(Create, Read, Update, Delete) 작업을 위한 메소드를 포함
 public interface UserRepository extends JpaRepository<User, Long> {
+    // Optional<User> findByEmail(String email);
+    //public User findByEmail(String email);
     Optional<User> findByEmail(String email);
     Optional<User> findByUserId(Long userId);
-    Optional<User> findByUsername(String Username);
+    Optional<User> findByPhone(String phone);
+
 }
-}
+
     //User save(User user);
 
 //    save(S entity): 엔티티 저장 및 업데이트

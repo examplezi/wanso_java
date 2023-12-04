@@ -4,6 +4,7 @@ import com.example.wanso.user.dto.CreateUserDto;
 import com.example.wanso.user.dto.SuccessResponse;
 import com.example.wanso.user.dto.UpdateUserDto;
 import com.example.wanso.user.entity.User;
+import com.example.wanso.user.exception.UserException;
 import com.example.wanso.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService { // 스프링 시큐리티
     private final UserRepository userRepository;
+    //private final CacheManager cacheManager; // 캐시 매니저 주입
+    private final PasswordEncoder passwordEncoder; // 스프링 시큐리티의 PasswordEncoder
+
 
     //    /**
 //     * @author Ryan
@@ -55,10 +59,9 @@ public class UserService {
 
         Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
-            throw new Exception("User with email " + email + " already exists.");
-            //ConflictException("User with email " + email + " already exists.");
+            // 이미 존재하는 이메일인 경우, 예외 발생
+            throw new UserException.EmailAlreadyExistsException("User with email " + email + " already exists.");
         }
-
         User newUser = new User();
 
         newUser.setEmail(email);
@@ -79,11 +82,10 @@ public class UserService {
 //     *
 //     * @return User[]
 //     */
-    public SuccessResponse getUserList(){
-        List<User> userList = new ArrayList<>(this.userRepository.findAllByUserId());
+    public SuccessResponse getUserList() { // 모든 유저 조회
+        List<User> userList = userRepository.findAll();
         return new SuccessResponse(true, userList);
     }
-
 //    /**
 //     * @author Ryan
 //     * @description 단일 유저 조회
@@ -93,10 +95,9 @@ public class UserService {
 //     * @return User
 //     */
 
-    public SuccessResponse getUser(int id){
-        User byUser = this.userRepository.findByUserId(userId);
-
-        return new SuccessResponse(true, byUser);
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserException.UserNotFoundException("User with email " + email + " not found."));
     }
 
     //    /**
@@ -108,13 +109,15 @@ public class UserService {
 //     * @return User Id
 //     */
     public SuccessResponse updateUser(UpdateUserDto updateUserDto){
-        int id = updateUserDto.getId();
+        //int id = updateUserDto.getId();
         String name = updateUserDto.getName();
 
         User user = this.userRepository.update(id, name);
 
         return new SuccessResponse(true, user);
     }
+
+
 
     //    /**
 //     * @author Ryan
@@ -125,8 +128,19 @@ public class UserService {
 //     * @return Boolean
 //     */
 
-    public SuccessResponse deleteUser(int id){
-        Boolean success = this.userRepository.delete(id);
-        return new SuccessResponse(success, null);
+//    public SuccessResponse deleteUser(int id){
+//        Boolean success = this.userRepository.delete(id);
+//        return new SuccessResponse(success, null);
+//    }
+
+    public SuccessResponse deleteUser(Long id){
+        Optional<User> user = userRepository.findByUserId(id);
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
+            return new SuccessResponse(true, null);
+        } else {
+            return new SuccessResponse(false, "User not found");
+        }
     }
+
 }
