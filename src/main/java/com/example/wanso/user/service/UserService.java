@@ -19,7 +19,7 @@ import java.util.Optional;
 public class UserService { // 스프링 시큐리티
     private final UserRepository userRepository;
     //private final CacheManager cacheManager; // 캐시 매니저 주입
-    private final PasswordEncoder passwordEncoder; // 스프링 시큐리티의 PasswordEncoder
+    //private final PasswordEncoder passwordEncoder; // 스프링 시큐리티의 PasswordEncoder
 
 
     //    /**
@@ -30,24 +30,7 @@ public class UserService { // 스프링 시큐리티
 //     *
 //     * @return User Id
 //     */
-//    public SuccessResponse onCreateUser(CreateUserDto createUserDto){
-//        int id = createUserDto.getId();
-//        String name = createUserDto.getName();
-//
-//        int userId = this.userRepository.save(id, name);
-//       // int user = userRepository.save()
-//        return new SuccessResponse(true, userId); // 성공
-    }
-//    public SuccessResponse onCreateUser(CreateUserDto createUserDto){
-//        User newUser = new User();
-//        newUser.setId(createUserDto.getId());
-//        newUser.setName(createUserDto.getName());
-//
-//        User user = new User();
-//        user.setUserId(createUserDto.get);
-//        User savedUser = userRepository.save(newUser);
-//        return new SuccessResponse(true, savedUser.getUserId());
-//    }
+
 
     @Transactional
     public SuccessResponse onCreateUser(CreateUserDto createUserDto) {
@@ -108,15 +91,38 @@ public class UserService { // 스프링 시큐리티
 //     *
 //     * @return User Id
 //     */
-    public SuccessResponse updateUser(UpdateUserDto updateUserDto){
-        //int id = updateUserDto.getId();
-        String name = updateUserDto.getName();
+//    public SuccessResponse updateUser(UpdateUserDto updateUserDto){
+//        //int id = updateUserDto.getId();
+//        String name = updateUserDto.getName();
+//
+//        User user = this.userRepository.update(id, name);
+//
+//        return new SuccessResponse(true, user);
+//    }
 
-        User user = this.userRepository.update(id, name);
+    @Transactional
+    public SuccessResponse updateUser(int id, UpdateUserDto updateUserDto) {
+        // 기존 유저 정보 조회
+        User user = userRepository.findByUserId((long) id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        // UpdateUserDto에서 정보를 가져와서 유저 정보 업데이트
+        if (updateUserDto.getEmail() != null) {
+            user.setEmail(updateUserDto.getEmail());
+        }
+        if (updateUserDto.getNickname() != null) {
+            user.setNickname(updateUserDto.getNickname());
+        }
+        if (updateUserDto.getPhone() != null) {
+            user.setPhone(updateUserDto.getPhone());
+        }
+        if (updateUserDto.getInterest() != null) {
+            user.setInterest(updateUserDto.getInterest());
+        }
+
+        userRepository.save(user);
 
         return new SuccessResponse(true, user);
     }
-
 
 
     //    /**
@@ -127,11 +133,6 @@ public class UserService { // 스프링 시큐리티
 //     *
 //     * @return Boolean
 //     */
-
-//    public SuccessResponse deleteUser(int id){
-//        Boolean success = this.userRepository.delete(id);
-//        return new SuccessResponse(success, null);
-//    }
 
     public SuccessResponse deleteUser(Long id){
         Optional<User> user = userRepository.findByUserId(id);

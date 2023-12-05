@@ -1,5 +1,6 @@
 package com.example.wanso.user.entity;
 
+import com.example.wanso.board.entity.Board;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -7,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 //export enum USER_INTEREST_ENUM {
 //    romance = 'romance',
 //    drama = 'drama',
@@ -69,6 +71,18 @@ public class User {
 
     @Column(nullable = true)
     private LocalDateTime deletedAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<Board> boards;
+
+    // boards 필드에 대한 getter 및 setter
+    public List<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(List<Board> boards) {
+        this.boards = boards;
+    }
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
 //    private List<Board> board = new ArrayList<>();
