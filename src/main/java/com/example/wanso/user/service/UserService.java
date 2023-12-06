@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,6 +82,19 @@ public class UserService { // 스프링 시큐리티
                 .orElseThrow(() -> new UserException.UserNotFoundException("User with email " + email + " not found."));
     }
 
+    public SuccessResponse findUserById(int id) {
+        // ID를 사용하여 유저를 찾습니다.
+        Optional<User> user = userRepository.findById((long) id);
+
+        // 유저가 존재하지 않는 경우 예외 처리
+        if (!user.isPresent()) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+
+        // 유저가 존재하는 경우, SuccessResponse 객체를 생성하여 반환
+        return new SuccessResponse(true, user.get());
+    }
+
     //    /**
 //     * @author Ryan
 //     * @description 유저 정보 수정
@@ -101,7 +113,7 @@ public class UserService { // 스프링 시큐리티
 //    }
 
     @Transactional
-    public SuccessResponse updateUser(int id, UpdateUserDto updateUserDto) {
+    public SuccessResponse updateUser(Long id, UpdateUserDto updateUserDto) {
         // 기존 유저 정보 조회
         User user = userRepository.findByUserId((long) id).orElseThrow(() -> new RuntimeException("User not found"));
 

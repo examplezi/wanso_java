@@ -70,7 +70,7 @@ public class UserController {
     @GetMapping(value = "/user")
     public ResponseEntity<SuccessResponse> getUser(@RequestParam("id") int id){
 
-        SuccessResponse response = this.userService.getUser(id);
+        SuccessResponse response = this.userService.findUserById(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -86,10 +86,12 @@ public class UserController {
      *
      * @return User Id
      */
-    @PutMapping(value = "/update")
-    public ResponseEntity<SuccessResponse> updateUser(@RequestBody @Valid UpdateUserDto updateUserDto){
+    //@PutMapping(value = "/update")
+    @PutMapping("/update/{id}")
+    //updateUser(@PathVariable Long id, @RequestBody @Valid UpdateUserDto updateUserDto)
+    public ResponseEntity<SuccessResponse> updateUser(@PathVariable Long id,@RequestBody @Valid UpdateUserDto updateUserDto){
 
-        SuccessResponse response = this.userService.updateUser(updateUserDto);
+        SuccessResponse response = this.userService.updateUser(id, updateUserDto);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
